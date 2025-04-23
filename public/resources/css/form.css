@@ -1,0 +1,66 @@
+.text,.text_range,.textarea,.password,.select
+{
+    width: 98%;
+    border:1px solid #ddd;
+    padding: 5px 3px 5px 3px;
+    border-radius: 3px;
+    background-color: #fff;
+}
+.select
+{
+    width: 100%;
+}
+form table
+{
+    border: 1px solid #dddddd;
+}
+form td
+{
+    padding: 5px 3px;
+}
+
+td.field
+{
+    text-align: right;
+}
+
+td.password_toggle
+{
+    width: 30px;
+}
+button.toggle_password
+{
+    border-radius: 3px;
+    border:1px solid #ddd;
+    background-color: #fff;
+    padding: 5px 3px 5px 3px;
+    cursor:pointer;
+    width: 28px;
+    display: inline-block;
+}
+span.required
+{
+    color: red;
+}
+td.label
+{
+    min-width: 100px !important;
+}
+
+#form_title
+{
+    text-align: center;
+    margin: 0;
+    margin-bottom: 5px;
+    padding: 5px;
+}
+
+.checklist div
+{
+    width: 49%;
+}
+
+textarea:focus, input:focus,select:focus
+{
+    outline: none;
+}

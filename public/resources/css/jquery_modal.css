@@ -1,0 +1,29 @@
+.jquery-modal
+{
+    z-index: 20;
+}
+.modal
+{
+    border-radius: 5px !important;
+    padding: 0;
+    min-width: 700px;
+}
+.modal header
+{
+    margin: 0;
+    padding: 1px;
+    padding-left: 10px;
+    color: #fff;
+    font-size: 100%;
+    border-radius: 5px 5px 0 0;
+}
+.modal main
+{
+    padding: 10px;
+}
+.modal footer
+{
+    text-align: center;
+    padding-bottom: 30px;
+    background-color: lightseagreen;
+}

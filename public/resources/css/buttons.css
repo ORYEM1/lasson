@@ -1,0 +1,33 @@
+.button
+ {
+     text-decoration: none;
+     display: inline-block;
+     text-align: center;
+     padding: 4px !important;
+     border-radius:2px;
+     cursor: pointer;
+ }
+
+select.button
+{
+    padding-top: 4px !important;
+    padding-bottom: 7px !important;
+    max-width: 150px;
+}
+
+ .button-secondary
+ {
+     background-color: lightseagreen;
+     border: 1px solid #aaa;
+     color: #222;
+ }
+  .button-secondary:hover
+ {
+     background-color: lightseagreen;
+ }
+ 
+ .disabled
+ {
+     background-color: #ccc !important;
+     border: 1px solid #ccc !important;
+ }

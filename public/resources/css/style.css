@@ -1,0 +1,110 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+body
+{
+    margin: 0;
+    padding: 0;
+    line-height:1.5em;
+    font-size:85%;
+    color:#333;
+    /*font-family:Segoe UI,Tahoma,Arial,Verdana,sans-serif*/
+    /*font-family: Helvetica, "Trebuchet MS", Verdana, sans-serif;*/
+    font-family: outfit, serif;
+    background-color: #fff;
+    /*background-image:url("img/bg-img-dark.png");
+    background-repeat: no-repeat;
+    background-size: cover;*/
+}
+/*-------------------------------#content--------------------------------------------------*/ 
+#content
+{
+   /*margin-top: 1px;
+    width:1100px;
+    margin: auto;
+    margin-bottom: 0;
+    min-height: 500px;
+    background-color:#fff;
+    z-index: 0;
+    padding: 0;
+    opacity:0.98;
+    padding-bottom: 5px;
+    box-shadow: -3px 0 5px -3px rgba(1, 1, 1, 0.87), 3px 0 5px -3px rgba(1, 1, 1, 0.87)
+}*/
+.error
+{
+    color: #f00;
+}
+#page_heading h1
+{
+    font-size: 13px;
+    letter-spacing: 1px;
+    font-weight: 700;
+    padding: 8px 20px;
+    margin: 2px;
+    display: inline-block;
+    text-transform: uppercase;
+    border-radius: 50px;
+    margin-bottom: 3px;
+    margin-top: 3px;
+}
+.table
+{
+    width: 100%;
+    border-collapse: collapse;
+}
+.table td, .table th
+{
+    padding: 3px;
+}
+
+.table-striped tr:nth-child(odd)
+{
+    background-color: #eee;
+}
+.table-striped tr
+{
+    border-bottom: 1px solid #ccc;
+    border-top: 1px solid #ccc;
+}
+.table-hover tr:hover
+{
+    background-color: #ccc !important;
+}
+.table code
+{
+    font-size: 130%;
+    display: block;
+    width: 400px;
+    word-wrap: break-word;
+    overflow: hidden;
+}
+td code.edited_data
+{
+    width: 230px !important;
+}
+.link_buttons ul
+{
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.link_buttons li
+{
+    display: inline-block;
+}
+
+code.transaction_param_value
+{
+    min-width: 300px;
+}
+#transaction_param
+{
+    width: 580px;
+    font-size: 16px;
+    word-wrap: break-word;
+    overflow: hidden;
+    padding: 5px;
+}
+
+
+

@@ -1,0 +1,146 @@
+@import url(https://fonts.googleapis.com/css?family=Roboto:300);
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Winky+Rough:ital,wght@0,300..900;1,300..900&display=swap');*/
+#logo
+{
+    /*font-family: Helvetica, "Trebuchet MS", Verdana, sans-serif;*/
+    font-family: outfit, serif;
+    color: rgba(5, 87, 158,0.7);
+    font-size: 150%;
+    text-align: center;
+    padding-bottom: 10px;
+}
+.register-page {
+    width: 700px;
+
+    padding: 8% 8% 0;
+    margin: auto;
+}
+.form {
+    border-radius: 8px;
+    position: relative;
+    z-index: 1;
+    background: #FFFFFF;
+    max-width: 400px;
+    margin: 0 auto 100px;
+    padding: 45px;
+    height: 80%;
+    text-align: center;
+    box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+}
+
+.form p{
+    font-weight: bolder;
+    font-family: outfit, serif;
+}
+.form hr{
+    color: lightseagreen;
+    width: 100%;
+}
+.form input:not([type="checkbox"])
+{
+    font-family:outfit, serif;
+    outline: 0;
+    background: #f2f2f2;
+    width: 100%;
+    border: 0;
+    margin: 0 0 15px;
+    padding: 15px;
+    box-sizing: border-box;
+    font-size: 14px;
+    color: #333333;
+    text-align: center;
+    border-radius: 25px;
+    font-weight: bolder;
+}
+label
+{
+    font-family: outfit, serif;
+    color: #333333;
+    font-size: 90%;
+}
+.form button {
+    font-family: outfit, serif;
+    text-transform: uppercase;
+    outline: 0;
+    background-color: lightseagreen;
+    width: 100%;
+    border: 0;
+    border-radius: 25px;
+    padding: 14px;
+    color: #FFFFFF;
+    font-size: 18px;
+    -webkit-transition: all 0.3 ease;
+    transition: all 0.3 ease;
+    cursor: pointer;
+    font-weight: bolder;
+;
+}
+.form button:hover,.form button:active,.form button:focus {
+    background-color: limegreen;
+    color: black;
+}
+.form .message {
+    margin: 15px 0 0;
+    color: #b3b3b3;
+    font-size: 12px;
+}
+.form .message a {
+    color: #4CAF50;
+    text-decoration: none;
+}
+.form .register-form {
+    display: none;
+}
+.container {
+    position: relative;
+    z-index: 1;
+    max-width: 300px;
+    margin: 0 auto;
+}
+.container:before, .container:after {
+    content: "";
+    display: block;
+    clear: both;
+}
+.container .info {
+    margin: 50px auto;
+    text-align: center;
+}
+.container .info span {
+    color: #4d4d4d;
+    font-size: 12px;
+}
+.container .info span a {
+    color: #000000;
+    text-decoration: none;
+}
+.container .info span .fa {
+    color: #EF3B3A;
+}
+body {
+    /* background-image:url("/resources/css/img/bg-img.jpg");
+     background-repeat: no-repeat;
+     background-size: cover;*/
+    background-color: lightseagreen;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.error{
+    color: #c00;
+    font-size: 13px;
+    padding-top: 10px;
+    font-family: sans-serif;
+}
+.header{
+    padding: 30px;
+    background-color: mintcream;
+    color: black;
+}
+.menu
+{
+    list-style: none;
+    justify-content: flex-end;
+    display: flex;
+}
