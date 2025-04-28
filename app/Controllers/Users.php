@@ -290,7 +290,7 @@ class Users extends RestrictedBaseController
                 $user_data['date_time_created']=$date.' '.$time;
                 $user_data['created_by']=$_SESSION['user_data']['id'];
                 $id=$this->base_model->insert_data('users',$user_data);
-                exit(json_encode(array('status' => 'success', 'message' => "User created successfully")));
+                exit(json_encode(array('status' => 1, 'message' => "User created successfully")));
             }
             else
             {
@@ -460,4 +460,31 @@ class Users extends RestrictedBaseController
 
         }
     }
+    public function delete_user($id = 0)
+    {
+        if (!user_has_access($this->controller, __FUNCTION__)) {
+            exit(json_encode(array('status' => 0, 'msg' => 'You do not have permission to delete orders.')));
+        }
+
+        if (empty($id)) {
+            exit(json_encode(array('status' => 0, 'msg' => 'Invalid User ID.')));
+        }
+
+        $user = $this->base_model->get_data(array(
+            'table' => 'users',
+            'where' => array('id' => $id)
+        ), true);
+
+        if (empty($user)) {
+            exit(json_encode(array('status' => 0, 'msg' => 'User not found.')));
+        }
+
+        // Delete the order
+        $this->base_model->delete_data('users', array(
+            'where' => array('id' => $id)
+        ));
+
+        exit(json_encode(array( 'User deleted successfully.')));
+    }
+
 }

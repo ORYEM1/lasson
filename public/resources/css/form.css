@@ -4,7 +4,8 @@
     border:1px solid #ddd;
     padding: 5px 3px 5px 3px;
     border-radius: 3px;
-    background-color: #fff;
+    background-color:#fff;
+
 }
 .select
 {
@@ -53,6 +54,7 @@ td.label
     margin: 0;
     margin-bottom: 5px;
     padding: 5px;
+    background-color: lightseagreen;
 }
 
 .checklist div

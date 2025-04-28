@@ -14,12 +14,6 @@ class DataTables extends RestrictedBaseController
     {
         if($function=='')exit('Function not set');
         $request_data=$_GET;
-
-//print_r($request_data);exit;
-       // $return_data = $query_parameters['data'];
-         // <- Ensure draw is present
-        //$return_data['data'] = [];
-
         if(!isset($request_data['draw']))exit('Draw not set');
         if(!isset($request_data['columns'])||!is_array($request_data['columns']))exit('columns not set');
         if(!isset($request_data['start']))exit('start not set');
@@ -33,5 +27,6 @@ class DataTables extends RestrictedBaseController
         $query_parameters['draw']=$request_data['draw'];
         $return_data=$this->data_model->$function($query_parameters);
         echo json_encode($return_data);
+
     }
 }

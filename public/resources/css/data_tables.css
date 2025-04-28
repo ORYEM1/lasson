@@ -1,6 +1,8 @@
 #page_data
 {
     padding: 5px !important;
+    /*background-color: lightseagreen;
+    color: white;*/
 }
 div#data_table
 {
@@ -39,7 +41,7 @@ table.data a
 }
 table.data a:hover
 {
-    color: #003366;
+    color: lightseagreen;
     cursor: pointer;
 }
 
@@ -76,7 +78,7 @@ table.data tr.dtrg-group
 
 table.data tr.dtrg-group td
 {
-    background:#036; 
+    background:lightseagreen;
     font-weight:normal; 
     border:none;
     padding: 0 0 0 5px;
@@ -136,14 +138,19 @@ table.data tr.dtrg-group th
 
 #page_heading
 {
-    width: 0%;
-    align-items: center;
-    padding:10px 0 0;
-    text-align: center;
-    margin: 3px;
-    background-color: lightseagreen;
 
-;
+    text-align: center;
+    align-content: center;
+    margin-top: 2px;
+
+    width: 10%;
+    color: white;
+    justify-content: center;
+    background-color: lightseagreen;
+    margin-left: 850px;
+    border-radius: 20px;
+
+
 }
 
 #data_footer
@@ -207,7 +214,7 @@ div.dt-processing {
             width: 13px;
             height: 13px;
             border-radius: 50%;
-            background: #cccccc;
+            background: lightseagreen;
             animation-timing-function: cubic-bezier(0, 1, 1, 0);
 
             &:nth-child(1) {

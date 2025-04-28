@@ -6,13 +6,16 @@
             $menu=array();
             $menu['Home']=array('href'=>'/','icon_class'=>'fa fa-home');
 
-            $menu['Stock']=array('href'=>'#','class'=>'has-sub','icon_class'=>'fa fa-cubes');
-            $menu['Stock']['submenu']['Overall Stock']=array('href'=>'/products');
-            $menu['Stock']['submenu']['New Stock']=array('href'=>'/new_stock');
+
+            //stocks
+            $menu['Stocks']=array('href'=>'#','class'=>'has-sub','icon_class'=>'fa fa-cubes');
+            $menu['Stocks']['submenu']['Stocks']=array('href'=>'/stocks');
+            $menu['Stocks']['submenu']['New Stock']=array('href'=>'/new_stock');
 
 
 
             $menu['Products']=array('href'=>'#','class'=>'has-sub');
+            $menu['Products']['submenu']['All Products']=array('href'=>'/products');
             $menu['Products']['submenu']['Categories']['submenu']['Men']['submenu']['Shoes']=array('href'=>'/shoes');
             $menu['Products']['submenu']['Categories']['submenu']['Men']['submenu']['Wears']=array('href'=>'/wears');
             $menu['Products']['submenu']['Categories']['submenu']['Men']['submenu']['Shoes']=array('href'=>'/shoes');
@@ -35,10 +38,10 @@
 
 
             $menu['Orders']=array('href'=>'#','class'=>'has-sub');
-            $menu['Orders']['submenu']['Active Orders']=array('href'=>'/active_orders');
-            $menu['Orders']['submenu']['Finished Orders']=array('href'=>'/finished_orders');
-            $menu['Orders']['submenu']['Cancelled Orders']=array('href'=>'/cancelled_orders');
-            $menu['Orders']['submenu']['Pending Orders']=array('href'=>'/pending_orders');
+            $menu['Orders']['submenu']['Orders']=array('href'=>'/orders');
+            $menu['Orders']['submenu']['Finished Orders']=array('href'=>'/orders/status/finished');
+            $menu['Orders']['submenu']['Cancelled Orders']=array('href'=>'/orders/status/cancelled');
+            $menu['Orders']['submenu']['Pending Orders']=array('href'=>'/orders/status/pending');
 
             $menu['Admin Menu']=array('href'=>'#','class'=>'has-sub');
             $menu['Admin Menu']['submenu']['Users']=array('href'=>'/users');

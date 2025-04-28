@@ -431,6 +431,8 @@ class BaseModel extends Model
         {
             $query=$this->db->query($sql);
             $data=$query->getResultArray();
+
+            //print_r($data);exit;
         }
         if($assoc)
         {
@@ -743,6 +745,8 @@ class BaseModel extends Model
             $cols='`'.implode('`,`',$cols).'`';
             $sql="INSERT INTO {$table} ({$cols}) VALUES";
             foreach($data as $row)
+
+            //print_r($data);exit;
             {
                 $values=array_values($row);
 

@@ -7,23 +7,28 @@
     border-radius: 5px !important;
     padding: 0;
     min-width: 700px;
+    font-size: 18px;
 }
 .modal header
 {
     margin: 0;
     padding: 1px;
     padding-left: 10px;
-    color: #fff;
+    text-align: center;
+    color: white;
+    background-color: lightseagreen;
     font-size: 100%;
     border-radius: 5px 5px 0 0;
 }
 .modal main
 {
-    padding: 10px;
+    padding: 20px;
 }
 .modal footer
 {
     text-align: center;
-    padding-bottom: 30px;
+   /* padding-bottom: 30px;*/
     background-color: lightseagreen;
+    padding: 20px;
+    border-radius: 0 0 5px 5px;
 }

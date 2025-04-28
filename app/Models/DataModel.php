@@ -310,9 +310,7 @@ class DataModel extends Model
         $params['query_params']=$parameters;
         $params['main_table']='products';
         $params['searchable_fields']=array('id','product_name','price','category','brand');
-        $params['fields']=array('id','product_name','price','color','size','description','status','brand','category','created_at');
-        //$params['join'] =(array('table' => 'categories', 'condition' => 'categories.id=products.category_id', 'type' => 'left'));
-
+        $params['fields']=array('id','product_name','price','category','color','status','description','brand','size','created_at');
         $query=$this->get_data($params);
         if(isset($parameters['download_data'])&&$parameters['download_data'])
         {
@@ -348,6 +346,144 @@ class DataModel extends Model
             $url="/products/delete_product/{$record['id']}";
             $row[]="<a href='{$url}'  title='delete' class='open_modal'><i class='fa fa-trash'></i></a>";
             $row[]="<input type='checkbox' class='select_record' data-id='{$record['id']}'>";
+
+
+            $return_data['data'][]=$row;
+        }
+        return $return_data;
+    }
+
+
+    public function get_orders($parameters=array())
+    {
+        $params=array();
+        $params['query_params']=$parameters;
+        $params['main_table']='orders';
+        $params['searchable_fields']=array('order_id','order_number','product');
+        $params['fields']=array('order_id ','order_number','customer_name','customer_email','phone_number',' product','quantity','total_amount','order_status','delivery_address','delivery_date',' payment_method','payment_status','ordered_on');
+        //$params['join'][]=array(array('table'=>'users','condition'=>'orders.user_id=users.id','type'=>'left'));
+        $params['join'][]=array(array('table'=>'products','condition'=>'orders.product=products.id','type'=>'left'));
+        $params['join'][]=array(array('table'=>'payments','condition'=>'orders.payment_id=payments.id','type'=>'left'));
+        $query=$this->get_data($params);
+
+        //print_r($query);exit;
+        if(isset($parameters['download_data'])&&$parameters['download_data'])
+        {
+            return $query['db_data'];
+        }
+        $return_data=$query['response_data'];
+        $return_data['data']=array();
+        //print_r($return_data);exit;
+        $data=$query['db_data'];
+
+
+
+       //print_r($data);exit;
+        foreach($data as $record)
+        {
+            $url=base_url("orders/view_order/{$record['order_id']}");
+            $row=array(
+
+                $record['order_id'],
+                $record['order_number'],
+                $record['customer_name'],
+                $record['customer_email'],
+                $record['phone_number'],
+                $record['product'],
+                $record['quantity'],
+                $record['total_amount'],
+                $record['order_status'],
+                $record['delivery_address'],
+                $record['delivery_date'],
+                $record['payment_method'],
+                $record['payment_status'],
+                //$record['comment'],
+                $record['ordered_on']
+
+                );
+
+            $url="/orders/view_order/{$record['order_id']}";
+            $row[]="<a href='{$url}'  title='View' class='open_modal'><i class='fa fa-eye'></i></a>";
+
+            $url="/orders/edit_order/{$record['order_id']}";
+            $row[]="<a href='{$url}'  title='Edit' class='open_modal'><i class='fa fa-edit'></i></a>";
+
+            $url="/orders/delete_order/{$record['order_id']}";
+            $row[]="<a href='{$url}'  title='delete' class='open_modal'><i class='fa fa-trash'></i></a>";
+            $row[]="<input type='checkbox' class='select_record' data-id='{$record['order_id']}'>";
+
+
+            $return_data['data'][]=$row;
+        }
+        return $return_data;
+    }
+    public function get_stocks($parameters=array())
+    {
+        $params=array();
+        $params['query_params']=$parameters;
+        $params['main_table']='stocks';
+        $params['searchable_fields']=array(
+            'stock_id',
+            'stock_code',
+            'stock_type',
+            'supplier_name',
+            'product',
+            'quantity');
+        $params['fields']=array(
+            'stock_id ','stock_code','stock_type','product_id','quantity','unit_price','total_price','supplier_name','receiver_name','stock_date','status','payment_status','remarks','created_at');
+        //$params['join'][]=array(array('table'=>'users','condition'=>'orders.user_id=users.id','type'=>'left'));
+        $params['join'][]=array(array('table' => 'products', 'condition' => 'products.id = stocks.product_id', 'type' => 'left'));
+        //$params['join'][]=array(array('table'=>'payments','condition'=>'orders.payment_id=payments.id','type'=>'left'));
+        $query=$this->get_data($params);
+
+        //print_r($query);exit;
+        if(isset($parameters['download_data'])&&$parameters['download_data'])
+        {
+            return $query['db_data'];
+        }
+        $return_data=$query['response_data'];
+        $return_data['data']=array();
+        //print_r($return_data);exit;
+        $data=$query['db_data'];
+
+
+
+        //print_r($data);exit;
+        foreach($data as $record)
+        {
+            $url=base_url("stocks/view_stock/{$record['stock_id']}");
+            $row=array(
+
+                $record['stock_id'],
+                $record['stock_code'],
+                $record['stock_type'],
+                $record['product_id'],
+                $record['quantity'],
+                $record['unit_price'],
+                $record['total_price'],
+                $record['supplier_name'],
+                $record['receiver_name'],
+                $record['stock_date'],
+                $record['status'],
+                $record['payment_status'],
+                //$record['remarks'],
+                //$record['updated_at'],
+
+
+                //$record['comment'],
+                $record['created_at']
+
+            );
+
+            $url="/stocks/view_stock/{$record['stock_id']}";
+            $row[]="<a href='{$url}'  title='View' class='open_modal'><i class='fa fa-eye'></i></a>";
+
+            $url="/stocks/edit_stock/{$record['stock_id']}";
+            $row[]="<a href='{$url}'  title='Edit' class='open_modal'><i class='fa fa-edit'></i></a>";
+
+            $url="/stocks/delete_stock/{$record['stock_id']}";
+            $row[]="<a href='{$url}'  title='delete' class='open_modal'><i class='fa fa-trash'></i></a>";
+            $row[]="<input type='checkbox' class='select_record' data-id='{$record['stock_id']}'>";
 
 
             $return_data['data'][]=$row;
