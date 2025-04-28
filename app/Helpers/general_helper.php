@@ -225,9 +225,56 @@ function get_themes()
     sort($array);
     return$array ;
 }
+
+function get_payment_method()
+{
+    $array=array('cash','mobile_money');
+    sort($array);
+    return $array;
+}
 function get_transaction_types()
 {
     return array('Collection'=>'collection','Disbursement'=>'disbursement');
+}
+
+function get_delivery_address()
+{
+    $array = array(
+
+                'Nakasero',
+                'Kololo',
+                'Kampala Hill',
+                'Katwe',
+                'Kibuye',
+                'Lugogo',
+                'Kawempe',
+                'Kanyanya',
+                'Kikaaya',
+                'Kisaasi',
+                'Kyebando',
+                'Makindye',
+                'Kansanga',
+                'Kabalagala',
+                'Muyenga',
+                'Munyonyo',
+                'Ntinda',
+                'Naguru',
+                'Bugolobi',
+                'Mbuya',
+                'Kiswa',
+                'Lubaga',
+                'Kasubi',
+                'Lungujja',
+                'Mutundwe',
+                'Nateete'
+            );
+        sort($array);
+
+
+
+        return $array;
+
+
 }
 
 function get_log_types()
@@ -297,5 +344,27 @@ function get_wallet_libraries()
     sort($libraries);
     return $libraries;
 }
+function get_order_status()
+{
+    return array('Pending'=>'pending','Cancelled'=>'cancelled','Completed'=>'completed');
+}
+function get_payment_status()
+{
+    return array('paid'=>'paid','unpaid'=>'unpaid');
+}
+function get_stock_type()
+{
+    return array('Incoming'=>'incoming','Outgoing'=>'outgoing');
+}
+function get_product_status($flip=false,$context=null)
+{
+    $array=array('Available'=>'1','unavailable'=>'0');
+    if($flip)
+    {
+        return array_flip($array);
+    }
+    return $array;
+}
+
 
 ?>

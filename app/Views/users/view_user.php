@@ -2,7 +2,7 @@
 echo view('page_heading');
 ?>
 <table class="table table-striped table-hover">
-    <?php echo $record[]=''?>;
+    <?php echo $record[]=''?>
     <tr><td>ID</td><td><?php echo $record['id'] ?></td></tr>
     <tr><td>First Name</td><td><?php echo $record['first_name'] ?></td></tr>
     <tr><td>Last Names</td><td><?php echo $record['last_names'] ?></td></tr>

@@ -110,36 +110,26 @@ class Products extends RestrictedBaseController
         if($this->request->getPost('submit'))
         {
             unset($_POST['submit']);
+            $data=$this->base_model->get_data(array('table'=>'products','where'=>array('id'=>$id)),true);
             if(!user_has_access($this->controller,__FUNCTION__))
             {
                 exit(json_encode(array('status'=>0,'msg'=>'You are not authorized to access this page')));
             }
             $validation=\Config\Services::validation();
 
-            $validation_rules=array('product_name'=>'required','price'=>'required','description'=>'required','image'=>'required','category_id'=>'required','brand_id'=>'required');
+            $validation_rules=array('product_name'=>'required','price'=>'required','description'=>'required');
             $validation->setRules($validation_rules);
             if($validation->withRequest($this->request)->run())
             {
-                $existing_data=$this->base_model->get_data(array('table'=>'products','where'=>array('id'=>$id)),true);
-                if(count($existing_data)>1)
+                $existing_data=$this->base_model->get_data(array('table'=>'products','where'=>array('product_name'=>$this->request->getPost('product_name'))),true);
+               /* if(count($existing_data)>1)
                 {
-                    exit(json_encode(array('status'=>0,'msg'=>'This product already exists!')));
-
+                    exit(json_encode(array('status'=>0,'msg'=>"The product name {$this->request->getPost('product_name')} is already in the database")));
                 }
-                else if(isset($existing_data[0]['id'])&&($existing_data[0]['id']!=$id))
+                else if(isset($existing_data[0]['id'])&&$existing_data[0]['id']!=$id)
                 {
-                    exit(json_encode(array('status'=>0,'msg'=>'This product already exists!')));
-                }
-                $db_product_data=$this->base_model->get_data(array('table'=>'products','where'=>array('id'=>$id)),true);
-                if(!user_has_permission('edit_product')&&$db_product_data[0]['category_id']!=$this->request->getPost('category_id'))
-                {
-                    exit(json_encode(array('status'=>0,'msg'=>'You are not authorized to access this page')));
-                }
-                elseif (isset($existing_data[0]['id'])&&($existing_data[0]['id']!=$id))
-                {
-                    exit(json_encode(array('status'=>0,'msg'=>'This product already exists!')));
-                }
-
+                    exit(json_encode(array('status'=>0,'msg'=>"The product name {$this->request->getPost('product_name')} is exist in the database")));
+                }*/
                 $data=array();
                 foreach($_POST as $key=>$value)
                 {
@@ -152,6 +142,7 @@ class Products extends RestrictedBaseController
                         $data[$key]=$value;
                     }
                 }
+
                 $this->base_model->update_data(array('table'=>'products','where'=>array('id'=>$id),'data',$data),true);
                 exit(json_encode(array('status'=>1,'msg'=>'Product successfully updated!')));
             }
@@ -166,6 +157,8 @@ class Products extends RestrictedBaseController
             if(user_has_access($this->controller,__FUNCTION__))
             {
                 $data=$this->base_model->get_data(array('table'=>'products','where'=>array('id'=>$id)),true);
+
+                //print_r($data);exit;
                 if(empty($data))
                 {
                     $vars['content_view']='not_found';
@@ -175,41 +168,20 @@ class Products extends RestrictedBaseController
                 {
                     $config=array();
                     $config['product_name']=array('field_type'=>'text_field','label'=>'Product Name','type'=>'text','autofocus'=>'autofocus','required'=>'required','value'=>$data['product_name']??'');
-                    $config['code']=array('field_type'=>'text_field','label'=>'Wallet Code','type'=>'text','required'=>'required','value'=>$data['code']??'');
-                    $options=$this->base_model->get_form_options(array('table'=>'countries','where'=>array('supported'=>1),'fields'=>array('id','country'),'order'=>'country'),'id','country');
-                    $config['country_id']=array('field_type'=>'select_field','label'=>'Country','options'=>$options,'value'=>$data['country_id']??'');
-                    $options=$this->base_model->get_form_options(array('table'=>'supported_currencies','fields'=>array('code'),'order'=>'code'),'code','code');
-                    $config['currency']=array('field_type'=>'select_field','label'=>'Currency','options'=>$options,'required'=>'required','value'=>$data['currency']??'');
-                    $config['status']=array('field_type'=>'select_field','label'=>'Wallet Status','required'=>'required','options'=>get_statuses_array(),'value'=>$data['status']??'');
-                    $config['collection_status']=array('field_type'=>'select_field','label'=>'Collection Status','required'=>'required','options'=>get_statuses_array(),'value'=>$data['collection_status']??'');
-                    $config['disbursement_status']=array('field_type'=>'select_field','label'=>'Disbursement Status','required'=>'required','options'=>get_statuses_array(),'value'=>$data['disbursement_status']??'');
-                    $config['min_collection']=array('field_type'=>'text_field','label'=>'Min. Collection','type'=>'text','class'=>'text number','required'=>'required','value'=>isset($data['min_collection'])? number_format($data['min_collection']):'');
-                    $config['max_collection']=array('field_type'=>'text_field','label'=>'Max. Collection','type'=>'text','class'=>' text number','required'=>'required','value'=>isset($data['max_collection'])? number_format($data['max_collection']):'');
-                    $config['min_disbursement']=array('field_type'=>'text_field','label'=>'Min. Disbursement','type'=>'text','class'=>'text number','required'=>'required','value'=>isset($data['min_disbursement'])?number_format($data['min_disbursement']):'');
-                    $config['max_disbursement']=array('field_type'=>'text_field','label'=>'Max. Disbursement','type'=>'text','class'=>'text number','required'=>'required','value'=>isset($data['max_disbursement'])?number_format($data['max_disbursement']):'');
-
-                    $where='';
-                    if(!empty($data['category_id']))
-                    {
-                        $where.="(category_id='{$data['category_id']}' OR category_id IS NULL)";
-
-                    }
-                    if(!empty($where))
-                    {
-                        $where.=" AND ".$where;
-                    }
-                    $where.="(product_id='{$data['product_id']}' OR product_id IS NULL)";
-                    $where_string=$where;
-                    $options=$this->base_model->get_form_option(array('table'=>'products','fields'=>array('id','product_name'),'where'=>$where_string,'order'=>'product_name'));
-
+                    $config['price']=array('field_type'=>'text_field','label'=>'price','required'=>'required','value'=>$data['price']??'');
+                    $config['status']=array('field_type'=>'select_field','label'=>'Status','required'=>'required','options'=>get_product_status(),'value'=>$data['status']??'');
+                    $config['size']=array('field_type'=>'text_field','label'=>'size','required'=>'required','value'=>$data['size']??'');
+                    $config['color']=array('field_type'=>'text_field','label'=>'color','value'=>$data['color']??'');
+                    $config['stock']=array('field_type'=>'number_field','label'=>'Stock','required'=>'required','value'=>$data['stock']??'');
+                    $config['category']=array('field_type'=>'text_field','label'=>'Category','required'=>'required','value'=>$data['category']??'');
+                    $config['brand']=array('field_type'=>'text_field','label'=>'Brand','value'=>$data['brand']??'');
+                    $config['updated_at']=array('field_type'=>'text_field','label'=>'Updated At','value'=>$data['updated_at']??'');
+                    $config['description']=array('field_type'=>'textarea','label'=>'Comment','type'=>'text','value'=>$data['description']??'','cols'=>300,'rows'=>3);
                     $vars['form_data']=get_form_data($config);
                     $vars['form_title']='Edit Product';
-                    $vars['submit_url']= base_url("products/edit_product/{$data['id']}");
+                    $vars['submit_url']= ("/products/edit_product/{$data['id']}");
                     $vars['content_view']='form';
                     $vars['title']='Edit Product';
-
-
-
                 }
             }
             else
@@ -226,29 +198,30 @@ class Products extends RestrictedBaseController
         if($this->request->getPost('submit'))
         {
             unset($_POST['submit']);
-            unset($_POST['base_role']);
             if(!user_has_access($this->controller,__FUNCTION__))
             {
                 exit(json_encode(array('status'=>0,'message'=>'Access Denied')));
             }
             $validation =\Config\Services::validation();
-            $numbers=array('price');
-
-            foreach ($numbers as $key)
-            {
-                if(!empty($_POST[$key]))
-                {
-                    $_POST[$key]=str_replace(',','',$_POST[$key]);
-                    if(!is_numeric($_POST[$key]))
-                    {
-                        exit(json_encode(array('status'=>0,'message'=>'Please enter a valid number')));
-                    }
-                }
-            }
-            $validation_rules=array('product_name'=>'required','price'=>'required','category'=>'required','size'=>'required');
+            $validation_rules=array(
+                'product_name'=>'required',
+                'price'=>'required',
+                'category'=>'required',
+                'size'=>'required',
+                'image'=>'required',);
             $validation->setRules($validation_rules);
             if($validation->withRequest($this->request)->run())
             {
+                $image = $this->request->getFile('image');
+                if($image->isValid() && !$image->hasMoved())
+                {
+                    $uploadPath = WRITEPATH.'uploads/products/';
+                    $imageName = $image->getRandomName();
+                    $image->move($uploadPath,$imageName);
+                }
+
+
+
                $data=array();
                foreach ($_POST as $key=>$value)
                {
@@ -261,6 +234,8 @@ class Products extends RestrictedBaseController
                        $data[$key]=$value;
                    }
                }
+
+               $data['image']=$uploadPath.$imageName;
               // $data['user_id']=$_SESSION['user_id']['id'];
               // $data['date_time_created']=date('Y-m-d H:i:s');
                $id=$this->base_model->insert_data('products',$data);
@@ -281,8 +256,8 @@ class Products extends RestrictedBaseController
                 $config['price']=array('field_type'=>'text_field','label'=>'price','required'=>'required','value'=>$_POST['price']??'');
                 $config['status']=array('field_type'=>'select_field','label'=>'Status','required'=>'required','options'=>get_statuses_array(),'value'=>$_POST['status']??'');
                 $config['size']=array('field_type'=>'text_field','label'=>'size','required'=>'required','value'=>$_POST['size']??'');
-                $config['color']=array('field_type'=>'text_field','label'=>'color','options'=>get_statuses_array(),'value'=>$_POST['color']??'');
-                $config['stock']=array('field_type'=>'number_field','label'=>'Stock','required'=>'required','value'=>$_POST['stock']??'');
+                $config['color']=array('field_type'=>'text_field','label'=>'color','required'=>'required','value'=>$_POST['color']??'');
+                $config['stock']=array('field_type'=>'text_field','label'=>'Stock','required'=>'required','type'=>'number','value'=>$_POST['stock']??'');
                 $config['category']=array('field_type'=>'text_field','label'=>'Category','required'=>'required','value'=>$_POST['category']??'');
                 $config['brand']=array('field_type'=>'text_field','label'=>'Brand','value'=>$_POST['brand']??'');
                 $config['description']=array('field_type'=>'textarea','label'=>'Comment','type'=>'text','value'=>$_POST['description']??'','cols'=>300,'rows'=>3);
