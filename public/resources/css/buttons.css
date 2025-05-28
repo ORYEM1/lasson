@@ -15,12 +15,21 @@ select.button
     max-width: 150px;
 }
 
+.button-primary
+{
+    background-color: lightseagreen;
+    border: 1px solid #aaa;
+    color: #222;
+}
+
  .button-secondary
  {
      background-color: lightseagreen;
      border: 1px solid #aaa;
      color: #222;
  }
+
+
   .button-secondary:hover
  {
      background-color: lightseagreen;

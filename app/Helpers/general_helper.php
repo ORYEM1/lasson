@@ -219,12 +219,7 @@ function get_genders_array($flip=false)
     return $array;
 }
 
-function get_themes()
-{
-    $array=array('blue','green','purple','pink','dark');
-    sort($array);
-    return$array ;
-}
+
 
 function get_payment_method()
 {
@@ -365,6 +360,84 @@ function get_product_status($flip=false,$context=null)
     }
     return $array;
 }
+function get_category()
+{
+    return [
+        'Construction Materials' => [
+            'Cement',
+            'Bricks',
+            'Sand',
+            'Gravel',
+            'Iron Sheets',
+            'Steel Bars',
+            'Nails',
+            'timber',
+        ],
+        'Electrical' => [
+            'Wires',
+            'Switches',
+            'Sockets',
+            'Circuit Breakers',
+            'Bulbs',
+            'Conduits',
+            'Extension Cables'
+        ],
+        'Plumbing' => [
+            'Pipes',
+            'Faucets',
+            'Taps',
+            'Water Tanks',
+            'Fittings',
+            'Toilets',
+            'Wash Basins'
+        ],
+        'Paint & Finishing' => [
+            'Paint',
+            'Thinner',
+            'Brushes',
+            'Rollers',
+            'Varnish',
+            'Wall Putty'
+        ],
+        'Tools' => [
+            'Hammer',
+            'Screwdrivers',
+            'Spanners',
+            'Drills',
+            'Measuring Tape',
+            'Pliers',
+            'Saw'
+        ],
+        'Safety Equipment' => [
+            'Gloves',
+            'Helmets',
+            'Safety Boots',
+            'Reflective Vests',
+            'Goggles',
+            'Ear Muffs'
+        ],
+        'Doors & Windows' => [
+            'Wooden Doors',
+            'Steel Doors',
+            'Door Locks',
+            'Hinges',
+            'Aluminium Windows',
+            'Glass Panels'
+        ],
+        'Garden & Outdoor' => [
+            'Hose Pipes',
+            'Sprinklers',
+            'Shovels',
+            'Rakes',
+            'Wheelbarrows'
+        ]
+    ];
+
+}
+
+
+
+
 
 
 ?>

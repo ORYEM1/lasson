@@ -439,59 +439,47 @@ function is_allowed_extension(ext)
     return false;
 }
 
-function submit_transactions()
-{
-    var data=$('#upload_transactions').serialize();
-    if(data.length>0)
-    {
-        data+='&submit=submit';
+function submit_transactions() {
+    var data = $('#upload_transactions').serialize();
+    if (data.length > 0) {
+        data += '&submit=submit';
+    } else {
+        data += 'submit=submit';
     }
-    else
-    {
-        data+='submit=submit';
-    }
-    var url=$('#upload_transactions').data('action');
+    var url = $('#upload_transactions').data('action');
     $('#processing').show();
     $.ajax({
-        url:url,
-        data:data,
-        type:'post',
-        timeout:30000,
-        success:function(data)
-        {
+        url: url,
+        data: data,
+        type: 'post',
+        timeout: 30000,
+        success: function (data) {
             //alert(data);
             $('#processing').hide();
-            if(is_json(data))
-            {
-                data=$.parseJSON(data);
+            if (is_json(data)) {
+                data = $.parseJSON(data);
                 $('#processing').hide();
-                if(data.status==1)
-                {
-                    show_info(data.msg,'Successful');
+                if (data.status == 1) {
+                    show_info(data.msg, 'Successful');
                     $('#rows_processed').val(data.rows_processed);
                     $('#rows_remaining').val(data.rows_remaining);
                     $('#batches_processed').val(data.batches_processed);
                     $('#skip_rows').val(data.skip_rows);
-                }
-                else
-                {
+                } else {
                     show_error(data.msg);
                 }
-            }
-            else
-            {
+            } else {
                 show_error("An internal system error occured while processing the request");
             }
         },
-        error:function(x,t,m)
-        {
+        error: function (x, t, m) {
             $('#processing').hide();
             show_ajax_error(t);
         }
-    })
+    });
 
-
-    $(document).ready(function() {
+}
+$(document).ready(function() {
         $('#data').on('click', '.clickable-row', function() {
             const url = $(this).data('href');
             if (url) {
@@ -499,4 +487,55 @@ function submit_transactions()
             }
         });
     });
-}
+
+    $(document).ready(function()
+    {
+
+        updateUnitPrice();
+        calculateTotals();
+        $('#addRow').click(function()
+        {
+            var row = $('#productTable tbody tr:first').clone();
+            row.find('input').val('');
+            $('#productTable tbody').append(row);
+            updateUnitPrice();
+            calculateTotals();
+        });
+        $(document).on('click','.removeRow', function()
+        {
+            if($('#productTable tbody tr').length>1)
+            {
+                $(this).closest('tr').remove();
+                calculateTotals();
+            }
+        });
+
+        $(document).on('input','.quantity',function()
+        {
+            calculateTotals();
+        });
+        function updateUnitPrice()
+        {
+            $('#productTable tbody tr').each(function()
+            {
+                var selected = $(this).find('.product-select option:selected');
+                var price = parseFloat(selected.date('price')) || 0;
+                $(this).find('.unit-price').val(price);
+            });
+        }
+
+        function calculateTotals()
+        {
+            var grandTotal = 0;
+            $('#productTable tbody tr').each(function()
+            {
+                var quantity = parseFloat($(this).find('.quantity').val())|| 0;
+                var price = parseFloat($(this).find('.unit-price').val())|| 0;
+                var total = qty*price;
+                $(this).find('.item-total').val(total.toFixed(2));
+                grandTotal+=total;
+            });
+            $('#grandTotal').val(grandTotal.toFixed(2));
+        }
+    });
+

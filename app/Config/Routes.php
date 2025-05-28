@@ -19,6 +19,9 @@ $routes->match(['get','post'], '/users/delete_user/(:any)', 'Users::delete_user/
 //login
 $routes->match(['get','post'], '/login', 'Login::index');
 
+//logout
+$routes->match(['get'], '/logout', 'Logout::index');
+
 //register
 $routes->match(['get','post'], '/register', 'Register::index');
 
@@ -27,18 +30,22 @@ $routes->match(['get','post'],'/products', 'Products::index');
 $routes->match(['get','post'],'/products/new_product/(:any)', 'Products::new_product/$1');
 $routes->match(['get','post'], '/products/view_product/(:any)', 'Products::view_product/$1');
 $routes->match(['get','post'],'/products/edit_product/(:any)', 'Products::edit_product/$1');
+$routes->match(['get','post'],'/products/delete_product/(:any)', 'Products::delete_product/$1');
+
+
+$routes->match(['get','post'], '/products/add_to_order/(:any)', 'Products::add_to_order/$1');
 
 //stock
 $routes->match(['get','post'],'/stocks', 'Stocks::index');
 $routes->match(['get','post'],'/stocks/new_stock', 'Stocks::new_stock');
 $routes->match(['get','post'],'/stocks/view_stock/(:any)', 'Stocks::view_stock/$1');
-
-
 $routes->match(['get','post'],'/stocks/edit_stock/(:any)', 'Stocks::edit_stock/$1');
+$routes->match(['get','post'],'/stocks/delete_stock/(:any)', 'Stocks::delete_stock/$1');
 
 
 //roles
 $routes->match(['get','post'], '/roles', 'Roles::index');
+$routes->match(['get','post'],'/roles/view_role/(:any)', 'Roles::view_role/$1');
 $routes->match(['get','post'],'/roles/edit_role/(:any)', 'Roles::edit_role/$1');
 $routes->match(['get','post'],'/roles/new_role', 'Roles::new_role');
 //$routes->get('roles/new_role/(:any)', 'Roles::new_role/$1');
@@ -71,8 +78,28 @@ $routes->match(['get','post'], '/products/view_product/(:any)', 'Products::view_
 //orders
 $routes->match(['get','post'],'/orders', 'Orders::index');
 $routes->match(['get','post'],'/orders/view_order/(:any)', 'Orders::view_order/$1');
+
+//order_items
+$routes->match(['get','post'],'/order_items', 'Order_items::index');
+$routes->match(['get','post'],'/order_items/view_order_items/(:any)', 'Order_items::view_order_items/$1');
+$routes->match(['get','post'],'/order_items/delete_order_item/(:any)', 'Order_items::delete_order_item/$1');
+$routes->match(['get','post'],'/order_items/view_order_items', 'Order_items::view_order_items');
+
+
 $routes->match(['get','post'],'/orders/edit_order/(:any)', 'Orders::edit_order/$1');
 $routes->match(['get','post'],'/orders/new_order', 'Orders::new_order');
+$routes->match(['get','post'],'/orders/view_order_items/(:any)', 'Orders::view_order_items/$1');
 $routes->match(['get','post'],'/orders/delete_order/(:any)', 'Orders::delete_order/$1');
 $routes->match(['get','post'],'/orders/status/(:segment)', 'Orders::index/$1');
+
+//transactions
+$routes->match(['get','post'],'/transactions', 'Transactions::index');
+$routes->match(['get','post'],'/transactions/view_transactions/(:any)', 'Transactions::view_transactions/$1');
+
+
+
+
+
+$routes->match(['get','post'],'/order_items', 'Order_items::index');
+$routes->match(['get','post'],'/order_items', 'Order_items::view_order_items');
 

@@ -24,6 +24,7 @@
 #page_header
 {
     position: fixed;
+    font-size: 20px;
     z-index: 10;
     width: 100%;
     background-color: lightseagreen;

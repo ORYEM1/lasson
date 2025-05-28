@@ -11,72 +11,84 @@ class Transactions extends RestrictedBaseController
     }
     public function index()
     {
-        if(user_has_access($this->controller,__FUNCTION__))
-        {
-            $table='transactions';
-            $_SESSION["search_{$table}"]=array();
-            $_SESSION["search_{$table}_where_in"]=array();
-            $_SESSION["search_{$table}_like"]=array();
-            if($this->request->getPost('search'))
-            {
-                $params=array();
-                $params['table_name']=$table;
-                $params['where']=$where??array();
-                $params['where_in']=$where_in??array();
-                $params['where_search_fields']=array('id'=>'id','transaction_code'=>'transaction_code');
-                $search_range=array();
-                $search_range['from_date_time']=array('column'=>'date_time_created','operator'=>'>=');
-                $search_range['to_date_time']=array('column'=>'date_time_created','operator'=>'<=');
-                $params['search_range']=$search_range;
+        if (user_has_access($this->controller, __FUNCTION__)) {
+            $table = 'transactions';
+
+            // Reset search sessions
+            $_SESSION["search_{$table}"] = [];
+            $_SESSION["search_{$table}_where_in"] = [];
+            $_SESSION["search_{$table}_like"] = [];
+
+            // Handle search
+            if ($this->request->getPost('search')) {
+                $params = [];
+                $params['table_name'] = $table;
+                $params['where'] = $where ?? [];
+                $params['where_in'] = $where_in ?? [];
+                $params['where_search_fields'] = [
+                    'id' => 'id',
+                    'transaction_code' => 'transaction_code',
+                    'transaction_name' => 'transaction_name',
+                    'transaction_number' => 'transaction_number'
+                ];
+
+                // Search by transaction_date (optional)
+                $search_range = [];
+                $search_range['from_date_time'] = ['column' => 'transaction_date', 'operator' => '>='];
+                $search_range['to_date_time'] = ['column' => 'transaction_date', 'operator' => '<='];
+                $params['search_range'] = $search_range;
+
                 $this->set_search_data($params);
-
             }
-            $vars['content_view']='data_table';
-            $vars['title']='Transactions';
-            $vars['page_heading']='Transactions';
 
-            //Data header
-            $data_header=array();
-            $data_header[]=array('name'=>'ID','sortable'=>true,'db_col_name'=>'id');
-            $data_header[]=array('name'=>'Transacting Code','sortable'=>false,'db_col_name'=>'transaction_code');
-            $data_header[]=array('name'=>'Amount','sortable'=>false,'db_col_name'=>'amount');
-            $data_header[]=array('name'=>'Payment Method','sortable'=>false,'db_col_name'=>'payment_method');
-            $data_header[]=array('name'=>'Transaction Status','sortable'=>false,'db_col_name'=>'transaction_status');
-            $data_header[]=array('name'=>'Transaction Date','sortable'=>false,'db_col_name'=>'transaction_date');
-            $data_header[]=array('name'=>'','class'=>'icon_col','sortable'=>false);
-            $data_header[]=array('name'=>'','class'=>'icon_col','sortable'=>false);
-            $data_header[]=array('name'=>'<input type="checkbox" class="check_all_boxes" data-target_class="select_record" title="Select All" />','class'=>'icon_col','sortable'=>false);
-            $vars['data_header']=$data_header;
+            // Setup data table config
+            $vars['content_view'] = 'data_table';
+            $vars['title'] = 'Transactions';
+            $vars['page_heading'] = 'Transactions';
 
-            //Data Footer
-            //============================================================================================
+            // Table Headers
+            $data_header = [];
+            $data_header[] = ['name' => 'ID', 'sortable' => true, 'db_col_name' => 'id'];
+            $data_header[] = ['name' => 'Transaction Code', 'sortable' => true, 'db_col_name' => 'transaction_code'];
+            $data_header[] = ['name' => 'Name', 'sortable' => true, 'db_col_name' => 'transaction_name'];
+            $data_header[] = ['name' => 'Number', 'sortable' => true, 'db_col_name' => 'transaction_number'];
+            $data_header[] = ['name' => 'Payment Method', 'sortable' => true, 'db_col_name' => 'payment_method'];
+            $data_header[] = ['name' => 'Status', 'sortable' => true, 'db_col_name' => 'transaction_status'];
+            $data_header[] = ['name' => 'Date', 'sortable' => true, 'db_col_name' => 'transaction_date'];
+            $data_header[] = ['name' => '', 'class' => 'icon_col', 'sortable' => false]; // Edit
+            $data_header[] = ['name' => '', 'class' => 'icon_col', 'sortable' => false]; // Delete
+            $data_header[] = [
+                'name' => '<input type="checkbox" class="check_all_boxes" data-target_class="select_record" title="Select All" />',
+                'class' => 'icon_col',
+                'sortable' => false
+            ];
 
-            $url="/transaction_account/new_account";
-            $data_footer[]=get_new_link_button(array('url'=>$url,'label'=>'New Account','icon'=>'fa fa-plus'));
-            $vars['data_footer']=$data_footer;
+            $vars['data_header'] = $data_header;
 
-            //Data tables options
-            //============================================================================================
-            $dt_params=array('ajax'=>base_url('data_tables/get_data/get_transactions'),'bFilter'=>true,'order_columns'=>array('ID'=>'desc'));
-            $vars['data_tables_config']=get_dt_config($data_header,$dt_params);
+            // DataTable config
+            $dt_params = [
+                'ajax' => base_url('data_tables/get_data/get_transactions'),
+                'bFilter' => true,
+                'order_columns' => ['id' => 'desc']
+            ];
+            $vars['data_tables_config'] = get_dt_config($data_header, $dt_params);
 
-
+        } else {
+            $vars['content_view'] = 'unauthorized';
+            $vars['title'] = '401 Unauthorized';
         }
-        else
-        {
-            $vars['content_view']='unauthorized';
-            $vars['title']='401 Unauthorized';
-        }
-        return view('page',$vars);
+
+        return view('page', $vars);
     }
-    public function view_account($id=0)
+
+    public function view_transaction($id=0)
     {
         if(user_has_access($this->controller,__FUNCTION__))
         {
-            $fields=array('id', 'account_number', 'account_name', 'purpose', 'created_by', 'date_time_created', 'status', 'wallet_libraries.readable_name',  "CONCAT(users.first_name,' ',users.other_names) AS created_by");
+            $fields=array('id', 'transaction_code', 'transacting_number', 'amount', 'payment_method', 'transaction_date', 'transaction_status', 'orders.order_number',  "CONCAT(users.first_name,' ',users.last_names) AS created_by");
             $join[]=array('table'=>'users','on'=>'users.id=transactions.created_by','type'=>'left');
-            $join[]=array('table'=>'wallet_libraries','on'=>'wallet_libraries.id=transaction_accounts.library_id','type'=>'left');
-            $data=$this->base_model->get_data(array('table'=>'transaction_accounts','join'=>$join,'fields'=>$fields,'where'=>array('id'=>$id)),true);
+            $join[]=array('table'=>'orders','on'=>'orders.id=transactions.order_id','type'=>'left');
+            $data=$this->base_model->get_data(array('table'=>'transactions','join'=>$join,'fields'=>$fields,'where'=>array('id'=>$id)),true);
             if(empty($data))
             {
                 $vars['content_view']='not_found';
@@ -86,9 +98,9 @@ class Transactions extends RestrictedBaseController
             {
                 $vars['record']=$data;
                 $vars['statuses']=get_statuses_array(true);
-                $vars['content_view']='transaction_accounts/view_account';
-                $vars['title']='Transaction Account';
-                $vars['page_heading']='Transaction Account';
+                $vars['content_view']='transactions/view_transactions';
+                $vars['title']='Transactions';
+                $vars['page_heading']='Transactions';
             }
         }
         else
@@ -103,18 +115,18 @@ class Transactions extends RestrictedBaseController
         if($this->request->getPost('submit'))
         {
             unset($_POST['submit']);
-            $data=$this->base_model->get_data(array('table'=>'transaction_accounts','where'=>array('id'=>$id)),true);
+            $data=$this->base_model->get_data(array('table'=>'transactions','where'=>array('id'=>$id)),true);
             if(!user_has_access($this->controller,__FUNCTION__))
             {
                 exit(json_encode(array('status'=>0,'msg'=>'You do not have permission to edit account')));
             }
 
             $validation = \Config\Services::validation();
-            $validation_rules=array('account_number' =>'required','account_name' =>'required','purpose' =>'required','library_id' =>'required','status' =>'required');
+            $validation_rules=array('transacting_number' =>'required','transaction_code' =>'required','order_id' =>'required','transaction_status' =>'required');
             $validation->setRules($validation_rules);
             if($validation->withRequest($this->request)->run())
             {
-                $existing_data=$this->base_model->get_data(array('table'=>'transaction_accounts','where'=>array('account_number'=>$this->request->getPost('account_number'),'library_id'=>$this->request->getPost('library_id'))));
+                $existing_data=$this->base_model->get_data(array('table'=>'transactions','where'=>array('transacting_number'=>$this->request->getPost('transacting_number'),'order_id'=>$this->request->getPost('order_id'))));
                 if(count($existing_data)>1)
                 {
                     exit(json_encode(array('status'=>0,'msg'=>"The account number {$this->request->getPost('account_number')} is already added for this library")));
@@ -143,7 +155,7 @@ class Transactions extends RestrictedBaseController
                     }
                 }
 
-                $this->base_model->update_data(array('table'=>'transaction_accounts','where'=>array('id'=>$id),'data'=>$data),true);
+                $this->base_model->update_data(array('table'=>'transactions','where'=>array('id'=>$id),'data'=>$data),true);
                 exit(json_encode(array('status'=>1,'msg'=>"Account updated successfully")));
             }
             else
@@ -156,7 +168,7 @@ class Transactions extends RestrictedBaseController
         {
             if(user_has_access($this->controller,__FUNCTION__))
             {
-                $data=$this->base_model->get_data(array('table'=>'transaction_accounts','where'=>array('id'=>$id)),true);
+                $data=$this->base_model->get_data(array('table'=>'transactions','where'=>array('id'=>$id)),true);
                 if(empty($data))
                 {
                     $vars['content_view']='not_found';
@@ -165,7 +177,8 @@ class Transactions extends RestrictedBaseController
                 else
                 {
                     $config=array();
-                    $config['account_number']=array('field_type'=>'text_field','label'=>'Account Number','type'=>'text','autofocus'=>'autofocus','required'=>'required','value'=>$data['account_number']??'');
+                    $config['transaction_code']=array('field_type'=>'text_field','label'=>'Transaction Code','type'=>'text','value'=>$data['transaction_code']);
+                    $config['transaction_number']=array('field_type'=>'text_field','label'=>'Account Number','type'=>'text','autofocus'=>'autofocus','required'=>'required','value'=>$data['account_number']??'');
                     $config['account_name']=array('field_type'=>'text_field','label'=>'Account Name','type'=>'text','required'=>'required','value'=>$data['account_name']??'');
                     $options=$this->base_model->get_form_options(array('table'=>'wallet_libraries','fields'=>array('id','readable_name'),'order'=>'readable_name'),'id','readable_name');
                     $config['library_id']=array('field_type'=>'select_field','label'=>'Library','options'=>$options,'required'=>'required','value'=>$data['library_id']??'');
@@ -186,79 +199,72 @@ class Transactions extends RestrictedBaseController
             return view($vars['content_view'],$vars);
         }
     }
-    public function new_account()
+
+    public function new_transaction()
     {
-        if($this->request->getPost('submit'))
-        {
-            unset($_POST['submit']);
-            if(!user_has_access($this->controller,__FUNCTION__))
-            {
-                exit(json_encode(array('status'=>0,'msg'=>'You do not have permission required to add an account')));
-            }
-            $validation = \Config\Services::validation();
-            $validation_rules=array('account_number' =>'required','account_name' =>'required','purpose' =>'required','library_id' =>'required','status' =>'required');
-            $validation->setRules($validation_rules);
-            if($validation->withRequest($this->request)->run())
-            {
-                $existing_data=$this->base_model->get_data(array('table'=>'transaction_accounts','where'=>array('account_number'=>$this->request->getPost('account_number'),'library_id'=>$this->request->getPost('library_id'))));
-                if(!empty($existing_data))
-                {
-                    exit(json_encode(array('status'=>0,'msg'=>"The account number {$this->request->getPost('account_number')} is already added for this library")));
-                }
-                $data=array();
-                foreach($_POST as $key=>$value)
-                {
-                    if(empty($value)&&$value!=0)
-                    {
-                        $data[$key]=null;
-                    }
-                    else
-                    {
-                        if(is_array($value))
-                        {
-                            $data[$key]=implode(',',$value);
-                        }
-                        else
-                        {
-                            $data[$key]=$value;
-                        }
-                    }
-                }
-                $data['created_by']=$_SESSION['user_data']['id'];
-                $data['date_time_created']=date('Y-m-d H:i:s');
-                $id=$this->base_model->insert_data('transaction_accounts',$data);
-                exit(json_encode(array('status'=>1,'msg'=>"Account added successfully. ID:{$id}")));
-            }
-            else
-            {
-                exit(json_encode(array('status'=>0,'msg'=>$validation->listErrors())));
+        if ($this->request->getPost('submit')) {
+            // Check permission first
+            if (!user_has_access($this->controller, __FUNCTION__)) {
+                exit(json_encode(['status' => 0, 'message' => 'You are not allowed to create transactions']));
             }
 
-        }
-        else
-        {
-            if(user_has_access($this->controller,__FUNCTION__))
-            {
-                $config=array();
-                $config['account_number']=array('field_type'=>'text_field','label'=>'Account Number','type'=>'text','autofocus'=>'autofocus','required'=>'required','value'=>$_POST['account_number']??'');
-                $config['account_name']=array('field_type'=>'text_field','label'=>'Account Name','type'=>'text','required'=>'required','value'=>$_POST['account_name']??'');
-                $options=$this->base_model->get_form_options(array('table'=>'wallet_libraries','fields'=>array('id','readable_name'),'order'=>'readable_name'),'id','readable_name');
-                $config['library_id']=array('field_type'=>'select_field','label'=>'Library','options'=>$options,'required'=>'required','value'=>$_GET['lib_id']??'');
-                $config['purpose']=array('field_type'=>'checklist','label'=>'Purpose','options'=>get_transaction_types(),'required'=>'required','value'=>$_POST['purpose']??'');
-                $config['status']=array('field_type'=>'select_field','label'=>'Account Status','options'=>get_statuses_array(),'required'=>'required','value'=>$_POST['status']??'');
-                $vars['form_data']=get_form_data($config);
-                $vars['form_title']='New Account';
-                $vars['submit_url']= base_url("transaction_accounts/new_account");
-                $vars['content_view']='form';
-                $vars['title']='New Account';
+            $validation = \Config\Services::validation();
+            $rules = [
+                'transaction_code'   => 'required',
+                'transaction_number' => 'required',
+                'order_code'         => 'required'
+            ];
+            $validation->setRules($rules);
+
+            if (!$validation->withRequest($this->request)->run()) {
+                exit(json_encode(['status' => 0, 'message' => $validation->getErrors()]));
             }
-            else
-            {
-                $vars['content_view']='unauthorized';
-                $vars['title']='401 Unauthorized';
+
+            $order_code = $this->request->getPost('order_code');
+
+            // Get the order details
+            $order = $this->base_model->get_data([
+                'table' => 'orders',
+                'where' => ['order_code' => $order_code]
+            ], true);
+
+            if (!$order) {
+                exit(json_encode(['status' => 0, 'message' => 'No order found for this code']));
             }
-            return view($vars['content_view'],$vars);
+
+            // Get order status and use it for transaction_status
+            $order_status = $order['order_status']; // assumes column exists in 'orders' table
+
+            $transactionData = [
+                'transaction_code'   => $this->request->getPost('transaction_code'),
+                'transaction_number' => $this->request->getPost('transaction_number'),
+                'transaction_name'   => $this->request->getPost('transaction_name'),
+                'transaction_date'   => $this->request->getPost('transaction_date'),
+                'transaction_status' => $order_status, // set from order
+                'payment_method'     => $this->request->getPost('payment_method'),
+                'order_code'         => $order_code // optional, for traceability
+            ];
+
+            $inserted = $this->base_model->insert_data('transactions', $transactionData);
+
+            if ($inserted) {
+                exit(json_encode(['status' => 1, 'message' => 'Transaction created successfully']));
+            } else {
+                exit(json_encode(['status' => 0, 'message' => 'Unable to create transaction']));
+            }
+        } else {
+            $transaction_code = 'TRX' . strtoupper(uniqid());
+            $product = $this->base_model->get_data([
+                'table' => 'products',
+            ]);
+            return view('transactions/new_transaction_form', [
+                'transaction_code'   => $transaction_code,
+                'product'            => $product,
+                'payment_statuses'   => get_payment_status(),
+            ]);
         }
     }
+
+
 
 }
