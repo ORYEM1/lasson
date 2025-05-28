@@ -263,7 +263,7 @@ class Users extends RestrictedBaseController
                     {
                         exit(json_encode(array('status' => 'error', 'message' => "You must assign role to this user")));
                     }
-                    if(strtolower($assigned_role['role_type'])=='admin')
+                    if(strtolower($assigned_role['role_type'])!='admin')
                     {
                         exit(json_encode(array('status' => 'error', 'message' => "You don't have access to this page")));
                     }

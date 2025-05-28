@@ -936,4 +936,27 @@ class BaseModel extends Model
         $cache->set($hash,json_encode($data),$expiry);
         return $data;
     }
+
+    public function cancel_data($table,$params)
+    {
+        if (empty($params)) {
+            return false;
+        }
+        $builder = $this->db->table($table);
+        if (!empty($params['where'])) {
+            $builder->where($params['where']);
+        }
+        if (isset($params['where_string'])) {
+            $builder->where($params['where_string']);
+        }
+        if (isset($params['where_in']) && is_array($params['where_in'])) {
+            foreach ($params['where_in'] as $field => $values) {
+                $where = " {$field} IN ('" . implode("','", $values) . "') ";
+                $builder->where($where);
+            }
+        }
+        $update = ['status' => 'calcelled'];
+        $builder->update($table, $update);
+        return $this->db->affectedRows();
+    }
 }

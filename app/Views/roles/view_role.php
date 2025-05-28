@@ -5,7 +5,7 @@ echo view('page_heading');
         <tr><td>ID</td><td><?php echo $record['id'] ?></td></tr>
         <tr><td>Role</td><td><?php echo $record['role'] ?></td></tr>
         <tr><td>Role Type</td><td><?php echo $record['role_type'] ?></td></tr>
-        <tr><td>Created by</td><td><?php echo $record['first_name'].' '.$record['other_names'] ?></td></tr>
+        <tr><td>Created by</td><td><?php echo $record['first_name'].' '.$record['last_names'] ?></td></tr>
         <tr><td>Status</td><td><?php echo $record['status'] ?></td></tr>
         <tr><td>Comment</td><td><?php echo $record['comment'] ?></td></tr>
         <tr>

@@ -1,0 +1,70 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Winky+Rough:ital,wght@0,300..900;1,300..900&display=swap');
+body {
+    font-family: outfit, serif;
+    margin:0;
+    padding: 20px;
+
+}
+h2 {
+    margin-bottom: 20px;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background-color: lightseagreen;
+    padding:10px 15px;
+}
+
+  #order-items-container{
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+
+ }
+.form-row {
+    display: flex;
+    gap: 0;
+    margin-bottom: 5px;
+    align-items: center;
+    padding-left: 500px;
+    text-align: center;
+}
+.form-row input {
+    padding: 8px;
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+    align-content: center;
+}
+.form-row button {
+    padding: 8px 10px;
+}
+.remove-btn {
+    background-color: red;
+    color: white;
+    border: none;
+    cursor: pointer;
+    padding-right: 50px;
+}
+.add-btn {
+    margin-top: 15px;
+    padding: 8px 12px;
+    background-color: lightseagreen;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+.submit-btn {
+    margin-top: 20px;
+    padding: 10px 15px;
+    justify-content: right;
+    align-items: end;
+}
+label {
+    display: block;
+    font-size: 14px;
+}
+.order-section {
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: 20px;
+}

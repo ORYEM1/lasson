@@ -7,7 +7,7 @@
 div#data_table
 {
     padding-top: 5px;
-    font-size:15px;
+    font-size:20px;
     width: 100%;
     display: block;
     overflow-x: auto;
@@ -33,6 +33,7 @@ table.data
 {
     width:100% !important;
     border-collapse: collapse;
+    font-size: 20px;
 }
 table.data a
 {

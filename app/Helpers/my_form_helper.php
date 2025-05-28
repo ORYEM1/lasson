@@ -1,5 +1,5 @@
 <?php
-function get_text_field($params): string
+/*function get_text_field($params): string
 {
     $datalist=array();
     $str = "<input";
@@ -10,7 +10,7 @@ function get_text_field($params): string
             $datalist=$value;
             continue;
         }
-        $str.= " {$key}='{$value}' ";
+        $str.= " $key='$value' ";
     }
     $str.= "/>";
     if(!empty($datalist))
@@ -23,7 +23,44 @@ function get_text_field($params): string
         $str.="</datalist>";
     }
     return $str;
+}*/
+function get_text_field($params): string
+{
+    $datalist = array();
+    $str = "<input";
+    foreach ($params as $key => $value)
+    {
+        if ($key == 'datalist')
+        {
+            $datalist = $value;
+            continue;
+        }
+
+        // 🔒 Prevent Array to String conversion
+        if (is_array($value)) {
+            continue; // or handle differently depending on your needs
+        }
+
+        $str .= " $key='" . htmlspecialchars($value, ENT_QUOTES) . "' ";
+    }
+    $str .= "/>";
+
+    if (!empty($datalist))
+    {
+        // Check if list attribute exists before using it
+        $list_id = isset($params['list']) ? htmlspecialchars($params['list'], ENT_QUOTES) : 'datalist_default';
+
+        $str .= "<datalist id='{$list_id}'>";
+        foreach ($datalist as $value)
+        {
+            $str .= "<option value='" . htmlspecialchars($value, ENT_QUOTES) . "'></option>";
+        }
+        $str .= "</datalist>";
+    }
+
+    return $str;
 }
+
 
 function get_checklist($field_name,$options,$params=array())
 {
@@ -130,8 +167,8 @@ function get_select_options($params,$options)
         }
     }
     $str="<option value=''></option>";
-    $sequential_options=array_is_list($options)?true:false;
-    foreach ($options as $key => $value)
+    //$sequential_options=array_is_list($options)?true:false;
+    /*foreach ($options as $key => $value)
     {
         if($sequential_options)
         {
@@ -143,6 +180,30 @@ function get_select_options($params,$options)
             $str.= " selected";
         }
         $str.=">{$key}</option>";
+    }*/
+    foreach($options as $key=>$value)
+    {
+        if(is_array($value))
+        {
+            $str.="<optgroup label='{$key}'>";
+            foreach($value as $subval)
+            {
+                $str.="<option value='{$subval}'";
+                if(in_array($subval,$selected_options))
+                {
+                    $str.="selected";
+                }
+                $str.= ">{$subval}</option>";
+            }
+            $str.="</optgroup>";
+        }else{
+            $str.="<option value='{$value}'";
+            if(in_array($value,$selected_options))
+            {
+                $str.="selected";
+            }
+            $str.= ">{$value}</option>";
+        }
     }
     return $str;
 }
@@ -166,8 +227,13 @@ function get_form_data($config)
 {
     $form_data=array();
     foreach ($config as $name => $item) {
-        if ($item['field_type'] =='text_field')
-        {
+        if (!isset($item['field_type'])) {
+            continue; // Skip invalid items
+        }
+
+        if ($item['field_type'] == 'text_field') {
+            // ...
+
             $params=array('name' => $name, 'id' => $item['id'] ?? $name, 'type' => $item['type']??'text', 'value' => $item['value'] ?? '', 'class' => $item['class'] ?? 'text');
             $optional_attributes=get_optional_attributes($item);
             if(!empty($optional_attributes))
@@ -249,6 +315,43 @@ function get_form_data($config)
             }
             $form_data[] = array('field_type' => $item['field_type'], 'label' => $item['label'] ?? '','options'=>$item['options']??array(), 'params' => $params);
         }
+        else if ($item['field_type'] == 'repeating_field')
+        {
+            $fields = array();
+            $group_fields = $item['fields'] ?? array();
+
+            foreach ($group_fields as $child_name => $child_item) {
+                $params = array(
+                    'name' => "{$child_name}[]", // make sure each is an array
+                    'id' => $child_item['id'] ?? $child_name,
+                    'type' => $child_item['type'] ?? 'text',
+                    'value' => $child_item['value'] ?? '',
+                    'class' => $child_item['class'] ?? 'input',
+                    'placeholder' => ucfirst(str_replace('_', ' ', $child_name))
+                );
+
+                $optional_attributes = get_optional_attributes($child_item);
+                if (!empty($optional_attributes)) {
+                    $params = array_merge($params, $optional_attributes);
+                }
+
+                $field_type = $child_item['type'] == 'select' ? 'select' : 'input';
+
+                $fields[] = array(
+                    'field_type' => $field_type,
+                    'label' => $child_item['label'] ?? ucfirst($child_name),
+                    'params' => $params,
+                    'options' => $child_item['options'] ?? array()
+                );
+            }
+
+            $form_data[] = array(
+                'field_type' => 'repeating_field',
+                'label' => $item['label'] ?? '',
+                'fields' => $fields
+            );
+        }
+
     }
     return $form_data;
 }

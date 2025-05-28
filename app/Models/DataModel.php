@@ -309,43 +309,65 @@ class DataModel extends Model
         $params=array();
         $params['query_params']=$parameters;
         $params['main_table']='products';
-        $params['searchable_fields']=array('id','product_name','price','category','brand');
-        $params['fields']=array('id','product_name','price','category','color','status','description','brand','size','created_at');
+        $params['searchable_fields']=array(
+            'id',
+            'stock_id',
+            'product_name',
+            'status',
+            'unit_price',
+            'category',
+            'size',
+            'brand',
+            );
+        $params['fields']=array(
+            'id ','stock_code','product_name','status','quantity','total_price','unit_price','category','size','brand','description');
+        //$params['join'][]=array(array('table'=>'users','condition'=>'orders.user_id=users.id','type'=>'left'));
+        $params['join'][]=array(array('table' => 'stocks', 'condition' => 'stocks.id = products.stock_id', 'type' => 'left'));
+        //$params['join'][]=array(array('table'=>'payments','condition'=>'orders.payment_id=payments.id','type'=>'left'));
         $query=$this->get_data($params);
+
+        //print_r($query);exit;
         if(isset($parameters['download_data'])&&$parameters['download_data'])
         {
             return $query['db_data'];
         }
         $return_data=$query['response_data'];
         $return_data['data']=array();
+        //print_r($return_data);exit;
         $data=$query['db_data'];
+
+
+
+        //print_r($data);exit;
         foreach($data as $record)
         {
             $url=base_url("products/view_product/{$record['id']}");
             $row=array(
 
                 $record['id'],
+                $record['stock_code'],
                 $record['product_name'],
-                $record['price'],
-                $record['color'],
-                $record['size'],
-                $record['description'],
-                $record['status'],
-                $record['brand'],
                 $record['category'],
-                $record['created_at']);
+                $record['quantity'],
+                $record['unit_price'],
+                $record['total_price'],
+                $record['brand'],
+                $record['size'],
+                $record['status'],
+                $record['description'],
 
 
-
-
+            );
 
             $url="/products/view_product/{$record['id']}";
             $row[]="<a href='{$url}'  title='View' class='open_modal'><i class='fa fa-eye'></i></a>";
+
             $url="/products/edit_product/{$record['id']}";
             $row[]="<a href='{$url}'  title='Edit' class='open_modal'><i class='fa fa-edit'></i></a>";
-            $url="/products/delete_product/{$record['id']}";
-            $row[]="<a href='{$url}'  title='delete' class='open_modal'><i class='fa fa-trash'></i></a>";
-            $row[]="<input type='checkbox' class='select_record' data-id='{$record['id']}'>";
+
+            $url="/products/add_to_order/{$record['id']}";
+            $row[]="<a href='{$url}'  title='delete' class='open_modal'><i class='fa fa-cart-plus'></i></a>";
+            //$row[]="<input type='checkbox' class='select_record' data-id='{$record['product_id']}'>";
 
 
             $return_data['data'][]=$row;
@@ -359,8 +381,8 @@ class DataModel extends Model
         $params=array();
         $params['query_params']=$parameters;
         $params['main_table']='orders';
-        $params['searchable_fields']=array('order_id','order_number','product');
-        $params['fields']=array('order_id ','order_number','customer_name','customer_email','phone_number',' product','quantity','total_amount','order_status','delivery_address','delivery_date',' payment_method','payment_status','ordered_on');
+        $params['searchable_fields']=array('order_id','order_number');
+        $params['fields']=array('order_id ','order_code','customer_name','customer_phone','order_status','delivery_address','order_date','payment_status','ordered_on');
         //$params['join'][]=array(array('table'=>'users','condition'=>'orders.user_id=users.id','type'=>'left'));
         $params['join'][]=array(array('table'=>'products','condition'=>'orders.product=products.id','type'=>'left'));
         $params['join'][]=array(array('table'=>'payments','condition'=>'orders.payment_id=payments.id','type'=>'left'));
@@ -381,21 +403,16 @@ class DataModel extends Model
        //print_r($data);exit;
         foreach($data as $record)
         {
-            $url=base_url("orders/view_order/{$record['order_id']}");
+            $url=base_url("orders/new_order/{$record['order_id']}");
             $row=array(
 
                 $record['order_id'],
-                $record['order_number'],
+                $record['order_code'],
                 $record['customer_name'],
-                $record['customer_email'],
-                $record['phone_number'],
-                $record['product'],
-                $record['quantity'],
-                $record['total_amount'],
+                $record['customer_phone'],
                 $record['order_status'],
                 $record['delivery_address'],
-                $record['delivery_date'],
-                $record['payment_method'],
+                $record['order_date'],
                 $record['payment_status'],
                 //$record['comment'],
                 $record['ordered_on']
@@ -423,20 +440,27 @@ class DataModel extends Model
         $params['query_params']=$parameters;
         $params['main_table']='stocks';
         $params['searchable_fields']=array(
-            'stock_id',
+            'id',
             'stock_code',
             'stock_type',
             'supplier_name',
-            'product',
-            'quantity');
+            'receiver_name',
+            'stock_date',
+            'payment_status'
+        );
         $params['fields']=array(
-            'stock_id ','stock_code','stock_type','product_id','quantity','unit_price','total_price','supplier_name','receiver_name','stock_date','status','payment_status','remarks','created_at');
+            'id ','stock_code','stock_type','supplier_name','receiver_name','stock_date','payment_status','created_at');
+//        print_r($params);exit;
         //$params['join'][]=array(array('table'=>'users','condition'=>'orders.user_id=users.id','type'=>'left'));
-        $params['join'][]=array(array('table' => 'products', 'condition' => 'products.id = stocks.product_id', 'type' => 'left'));
+        $params['join'][] = array(array(
+            'table' => 'products',
+            'condition' => 'stocks.id = products.id',
+            'type' => 'left'
+        ));
         //$params['join'][]=array(array('table'=>'payments','condition'=>'orders.payment_id=payments.id','type'=>'left'));
         $query=$this->get_data($params);
 
-        //print_r($query);exit;
+//        print_r($query);exit;
         if(isset($parameters['download_data'])&&$parameters['download_data'])
         {
             return $query['db_data'];
@@ -451,44 +475,88 @@ class DataModel extends Model
         //print_r($data);exit;
         foreach($data as $record)
         {
-            $url=base_url("stocks/view_stock/{$record['stock_id']}");
+            $url=base_url("stocks/view_stock/{$record['id']}");
             $row=array(
 
-                $record['stock_id'],
+                $record['id'],
                 $record['stock_code'],
                 $record['stock_type'],
-                $record['product_id'],
-                $record['quantity'],
-                $record['unit_price'],
-                $record['total_price'],
                 $record['supplier_name'],
                 $record['receiver_name'],
                 $record['stock_date'],
-                $record['status'],
                 $record['payment_status'],
-                //$record['remarks'],
-                //$record['updated_at'],
-
-
-                //$record['comment'],
                 $record['created_at']
 
             );
 
-            $url="/stocks/view_stock/{$record['stock_id']}";
+            $url="/stocks/view_stock/{$record['id']}";
             $row[]="<a href='{$url}'  title='View' class='open_modal'><i class='fa fa-eye'></i></a>";
 
-            $url="/stocks/edit_stock/{$record['stock_id']}";
+            $url="/stocks/edit_stock/{$record['id']}";
             $row[]="<a href='{$url}'  title='Edit' class='open_modal'><i class='fa fa-edit'></i></a>";
 
-            $url="/stocks/delete_stock/{$record['stock_id']}";
+            $url="/stocks/delete_stock/{$record['id']}";
             $row[]="<a href='{$url}'  title='delete' class='open_modal'><i class='fa fa-trash'></i></a>";
-            $row[]="<input type='checkbox' class='select_record' data-id='{$record['stock_id']}'>";
+            $row[]="<input type='checkbox' class='select_record' data-id='{$record['id']}'>";
 
 
             $return_data['data'][]=$row;
         }
         return $return_data;
     }
+    public function get_order_items($parameters=array())
+    {
+        $params=array();
+        $params['query_params']=$parameters;
+        $params['main_table']='order_items';
+        $params['searchable_fields']=array(
+            'product_name',
+
+        );
+        $params['fields']=array(
+            'id',
+            'product_name',
+            'category',
+            'quantity',
+            'unit_price',
+            'total_price',
+
+        );
+
+        $params['join'][]=array(array('table' => 'products', 'condition' => 'products.id = stocks.product_id', 'type' => 'left'));
+        $query=$this->get_data($params);
+
+        //print_r($query);exit;
+        if(isset($parameters['download_data'])&&$parameters['download_data'])
+        {
+            return $query['db_data'];
+        }
+        $return_data=$query['response_data'];
+        $return_data['data']=array();
+        //print_r($return_data);exit;
+        $data=$query['db_data'];
+
+        foreach($data as $record)
+        {
+            $url=base_url("order_items/view_order_items/{$record['id']}");
+            $row=array(
+                $record['id'],
+                $record['product_name'],
+                $record['category'],
+                $record['quantity'],
+                $record['unit_price'],
+                $record['total_price'],
+            );
+            $url="/order_items/view_order_items/{$record['id']}";
+            $row[]="<a href='{$url}'  title='View' class='open_modal'><i class='fa fa-eye'></i></a>";
+
+            $url="/order_items/delete_order_item/{$record['id']}";
+            $row[]="<a href='{$url}'  title='Edit' class='open_modal'><i class='fa fa-remove'></i></a>";
+
+            $return_data['data'][]=$row;
+        }
+        return $return_data;
+    }
+
 
 }

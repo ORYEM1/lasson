@@ -7,6 +7,30 @@ function controller_permissions()
     $permissions['users']['edit_user']='edit users';
     $permissions['users']['new_user']='add users';
     $permissions['users']['reset_password']='reset user password';
+    //sales
+    $permissions['sales']['index']='view sales';
+    $permissions['sales']['view_sale']='edit sale';
+
+
+    //orders
+    $permissions['orders']['delete_order']='delete order';
+    $permissions['orders']['cancel_order']='cancel order';
+    $permissions['orders']['edit_order']='edit order';
+    $permissions['orders']['new_order']='add order';
+    $permissions['orders']['view_order']='view order';
+
+
+    //stocks
+    $permissions['stocks']['new_stock']='add stock';
+    $permissions['stocks']['delete_stock']='delete stock';
+    $permissions['stocks']['edit_stock']='edit stock';
+    $permissions['stocks']['view']='view stocks';
+
+    //transactions
+    $permissions['transactions']['view_transactions']='view transactions';
+    $permissions['transactions']['delete_transactions']='delete transactions';
+
+
 
     //Roles
     $permissions['roles']['index']='view user roles';
@@ -29,6 +53,7 @@ function controller_permissions()
     $permissions['logged_numbers']['view_logged_number']='view logged numbers';
     $permissions['logged_numbers']['edit_logged_number']='edit logged number';
     $permissions['logged_numbers']['new_logged_number']='add logged number';
+
 
 
 

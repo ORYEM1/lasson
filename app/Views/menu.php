@@ -16,37 +16,37 @@
 
             $menu['Products']=array('href'=>'#','class'=>'has-sub');
             $menu['Products']['submenu']['All Products']=array('href'=>'/products');
-            $menu['Products']['submenu']['Categories']['submenu']['Men']['submenu']['Shoes']=array('href'=>'/shoes');
-            $menu['Products']['submenu']['Categories']['submenu']['Men']['submenu']['Wears']=array('href'=>'/wears');
-            $menu['Products']['submenu']['Categories']['submenu']['Men']['submenu']['Shoes']=array('href'=>'/shoes');
-            $menu['Products']['submenu']['Categories']['submenu']['Men']['submenu']['Shoes']=array('href'=>'/shoes');
-            $menu['Products']['submenu']['Categories']['submenu']['Ladies']['submenu']['Shoes']=array('href'=>'/shoes');
-            $menu['Products']['submenu']['Categories']['submenu']['Ladies']['submenu']['Wears']=array('href'=>'/shoes');
-            $menu['Products']['submenu']['Categories']['submenu']['Ladies']['submenu']['Shoes']=array('href'=>'/shoes');
-            $menu['Products']['submenu']['Categories']['submenu']['Ladies']['submenu']['Shoes']=array('href'=>'/shoes');
-            $menu['Products']['submenu']['Categories']['submenu']['Children']['submenu']['Shoes']=array('href'=>'/shoes');
-            $menu['Products']['submenu']['Categories']['submenu']['Children']['submenu']['Wears']=array('href'=>'/shoes');
-            $menu['Products']['submenu']['Categories']['submenu']['Children']['submenu']['Shoes']=array('href'=>'/shoes');
-            $menu['Products']['submenu']['Categories']['submenu']['Children']['submenu']['Shoes']=array('href'=>'/shoes');
+            $menu['Products']['submenu']['add_to_order']=array('href'=>'/add_to_order');
 
             //sales
             $menu['Sales']=array('href'=>'#','class'=>'has-sub','icon_class'=>'fa fa-bar-chart');
-            $menu['Sales']['submenu']['Report']['submenu']['Daily']=array('href'=>'/daily');
-            $menu['Sales']['submenu']['Report']['submenu']['Weekly']=array('href'=>'/weekly');
-            $menu['Sales']['submenu']['Report']['submenu']['Monthly']=array('href'=>'/monthly');
-            $menu['Sales']['submenu']['Report']['submenu']['Annually']=array('href'=>'/annually');
+            $menu['Sales']['submenu']['Daily']=array('href'=>'/daily');
+            $menu['Sales']['submenu']['Weekly']=array('href'=>'/weekly');
+            $menu['Sales']['submenu']['Monthly']=array('href'=>'/monthly');
+            //$menu['Sales']['submenu']['Report']['submenu']['Annually']=array('href'=>'/annually');
 
-
-            $menu['Orders']=array('href'=>'#','class'=>'has-sub');
+            //orders
+            $menu['Orders']=array('href'=>'#','class'=>'has-sub','icon_class'=>'fa fa-shopping-cart');
             $menu['Orders']['submenu']['Orders']=array('href'=>'/orders');
             $menu['Orders']['submenu']['Finished Orders']=array('href'=>'/orders/status/finished');
             $menu['Orders']['submenu']['Cancelled Orders']=array('href'=>'/orders/status/cancelled');
             $menu['Orders']['submenu']['Pending Orders']=array('href'=>'/orders/status/pending');
 
+            $menu['Order Items']=array('href'=>'#','class'=>'has-sub','icon_class'=>'fa fa-shopping-cart');
+            $menu['Order Items']['submenu']['Order Items']=array('href'=>'/order_items');
+
+
+
+
+            //testing
+            //$menu['Order']['submenu']['New Order']=array('href'=>'#','class'=>'has-sub');
+
             $menu['Admin Menu']=array('href'=>'#','class'=>'has-sub');
             $menu['Admin Menu']['submenu']['Users']=array('href'=>'/users');
             $menu['Admin Menu']['submenu']['User Roles']=array('href'=>'/roles');
-            $menu['Admin Menu']['submenu']['Staffs']=array('href'=>'/staffs');
+            $menu['Admin Menu']['submenu']['Transactions']=array('href'=>'/transactions');
+           //$menu['Admin Menu']['submenu']['Staffs']=array('href'=>'/staffs');
+
             $menu['Admin Menu']['submenu']['Audit Log']=array('href'=>'#','class'=>'has-sub');
             $menu['Admin Menu']['submenu']['Audit Log']['submenu']['User Activity Log']=array('href'=>'/activity_log');
             $menu['Admin Menu']['submenu']['Audit Log']['submenu']['Edited Data Log']=array('href'=>'/edited_data_log');
